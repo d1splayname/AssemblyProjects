@@ -1,0 +1,15 @@
+*.vcxproj.user
+*.vsidx
+*.suo
+*.db
+*.json
+*.exe
+*.ilk
+*.obj
+*.exe.recipe
+*.log
+*.tlog
+*.db-shm
+*.db-wal
+*.opendb
+*.pdb
