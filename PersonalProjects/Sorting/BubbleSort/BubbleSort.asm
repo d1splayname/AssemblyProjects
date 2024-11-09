@@ -17,7 +17,7 @@ OuterLoop:
 	MOV ebx, ecx
 	
 	InnerLoop:
-	CMP
+	CMP	array[bx], array[bx - 1]
 
 	MOV array[bx], eax
 	xchg ebx, ecx
