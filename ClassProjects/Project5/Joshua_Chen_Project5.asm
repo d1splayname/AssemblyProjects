@@ -12,9 +12,9 @@ ExitProcess proto, dwExitCode:dword
 .data
 	; Input variables (change these)
 
-	input BYTE "JOSHUACHEN"
-	key BYTE "BAD" ; bound in 1 to len(input) - 1
-	options BYTE 1 ;1 encryption, else decryption
+	input BYTE "JPUESZSBAPANNHTXRTLBVLL"
+	key BYTE "ABCXYZ" ;bound in 1 to len(input) - 1
+	options BYTE 0 ;1 encryption, else decryption
 
 	;=============================
 	;do not modify below this line
@@ -56,7 +56,10 @@ copyLoop:
 	ADD esi, ecx
 	DEC esi
 
-	MOV eax, 0
+	;check if decrypting
+	MOVZX eax, options
+	CMP eax, 1
+	JNE decrypt
 
 applyCipherLoop:
 	DEC ecx
@@ -66,31 +69,74 @@ applyCipherLoop:
 	MOVZX eax, ah
 
 	LEA edi, key
-	ADD edi, eax
 	MOV ebx, 0
-	MOV bl, [edi]
+	MOV bl, [edi + eax]
+	SUB bl, 'A'
+
+	;MOV ebx, 0
 
 	ADD bl, [esi]
-	MOV al, [esi] ;debug
-	SUB bl, 92
+	MOV dl, [esi] ;debug
+
+	CMP bl, 90
+	JLE isInRange
+	SUB bl, 26
 
 	CMP bl, 65
-	JGE inRange
+	JGE isInRange
 	ADD bl, 27
-inRange:
-	
-	CMP options, 1
-	JE skipDecrypt
-	;ADD bl, 1
-	;CMP bl, 
-	;JGE
-skipDecrypt:
+
+
+isInRange:
+
 	MOV [esi], bl
 	
 	DEC esi
 	CMP ecx, 0
 	JG applyCipherLoop
+
+	JMP done
+
+decrypt:
+
+	MOVZX ecx, inputLen
 	
+	LEA esi, output
+	ADD esi, ecx
+	DEC esi
+
+applyDecypherLoop:
+	DEC ecx
+
+	MOV al, [esi]
+	MOVZX ebx, al
+
+	ADD bl, 'A'
+
+	MOV eax, ecx
+	DIV keyLen ;remainder in ah
+	MOVZX eax, ah
+
+	LEA edi, key
+	SUB bl, [edi + eax]
+
+	CMP bl, 65
+	JGE isInRange1
+	ADD bl, 26
+
+	CMP bl, 90
+	JLE isInRange1
+	SUB bl, 26
+
+isInRange1:
+	
+	MOV [esi], bl
+	
+	DEC esi
+	CMP ecx, 0
+	JG applyDecypherLoop
+
+done:
 	invoke ExitProcess, 0
 main endp
 

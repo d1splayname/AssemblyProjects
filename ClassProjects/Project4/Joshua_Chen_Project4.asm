@@ -11,8 +11,8 @@ ExitProcess proto, dwExitCode:dword
 
 .data
 	; Input variables (change these)
-	s1 BYTE "GARDEN" ;schoolmaster
-	s2 BYTE "DANGER" ;theclassroom
+	s1 BYTE "AAA"
+	s2 BYTE "BBB"
 
 	;=============================
 	;do not modify below this line
